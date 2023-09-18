@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_16_023009) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_18_163243) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,4 +22,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_16_023009) do
     t.index ["face", "suite"], name: "index_cards_on_face_and_suite", unique: true
   end
 
+  create_table "table_types", force: :cascade do |t|
+    t.integer "buy_in_max", null: false
+    t.integer "buy_in_min", null: false
+    t.integer "ante", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tables", force: :cascade do |t|
+    t.bigint "table_type_id", null: false
+    t.string "unique_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["table_type_id"], name: "index_tables_on_table_type_id"
+  end
+
+  add_foreign_key "tables", "table_types"
 end

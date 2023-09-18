@@ -6,6 +6,8 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+require 'securerandom'
+
 suites = ["spades", "clubs", "diamonds", "hearts"]
 faces = [
   {face: "A", value: 11, alternate_value: 1},
@@ -29,4 +31,17 @@ suites.each do |st|
       Card.create(face: fc[:face], suite: st, value: fc[:value], alternate_value: fc[:alternate_value])
     end
   end
+end
+
+table_types = [
+  TableType.new({buy_in_max: 100, buy_in_min: 10, ante: 1}),
+  TableType.new({buy_in_max: 200, buy_in_min: 20, ante: 2}),
+  TableType.new({buy_in_max: 500, buy_in_min: 50, ante: 5})
+]
+
+table_types.each do |tb|
+  unless TableType.find_by(buy_in_max: tb.buy_in_max, buy_in_min: tb.buy_in_min).present?
+    tb.save!
+  end
+  Table.create!({table_type: tb, unique_id: SecureRandom.hex(16)})
 end
