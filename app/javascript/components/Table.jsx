@@ -1,84 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import useEffectHelper from "../helpers/useEffectHelper";
-import Hand from "./Hand";
+import Players from "./Players";
+import Dealer from "./Dealer";
+import getTable from "../actions/getTable";
+import joinTable from "../actions/joinTable";
+import { dealHand } from "../actions/dealHand";
+import playerHit from "../actions/playerHit";
 
 export default function Table() {
   const params = useParams();
   const [table, setTable] = useState({});
-  const [shoe, setShoe] = useState([]);
-  const [hands, setHands] = useState([{name: "Player 1", cards: []}]);
+  const [players, setPlayers] = useState([]);
+  const [dealer, setDealer] = useState({cards: []});
 
-  useEffectHelper(`/api/v1/table/${params.id}`, setTable, [params.id]);
-  useEffectHelper('/api/v1/shoe/new', setShoe);
-
-  var workingShoe = [...shoe];
-  var workingHands = [...hands];
-
-  const dealCards = () => {
-    // burn();
-  };
-
-  const burn = () => {
-    const newShoe = [...shoe];
-    setShoe(newShoe.slice(1));
-  };
-
-  function dealCard(shoe) {
-    const newCard = shoe[0];
-    return [newCard, shoe.slice(1)]
+  function setData(body) {
+    setTable(body.table);
+    setPlayers(body.players);
+    setDealer(body.dealer);
   }
 
-  useEffect(() => {
-    workingShoe = shoe;
-  }, [shoe]);
+  useEffect(() => getTable(params.id, setData), [params.id]);
 
-  useEffect(() => {
-    workingHands = hands;
-  }, [hands]);
+  const join = () => joinTable(params.id, 'someuser', setData);
 
-  function dealInitialHand() {
-    for (let i = 0; i <= 1; i++) {
-      workingHands.forEach((hand) => {
-        [newCard, workingShoe] = dealCard(workingShoe);
-        hand.cards.push(newCard);
-      });
-    }
+  const hit = () => playerHit(params.id, 'someuser', setData);
 
-    setShoe(workingShoe);
-    setHands(workingHands);
-  }
-
-  const showPlayers = workingHands.map((hand, index) => {
-    <div key={index} className="card">
-      <Hand cards={hand.cards} />
-    </div>
-  });
+  const dealInitialHand = () => dealHand(params.id, setData);
 
   return (
-    <div className="container">
-      <div className="row">
+    <div>
+      <div className="row mb-4 mt-4">
+        <div className="col-4 offset-4">
+          <div className="row">
+            {/* <h5>Shoe Size: {table.shoe.cards.length}</h5> */}
+          </div>
+        </div>
+      </div>
+      <div className="row mt-4 mb-4">
         <h4>Dealer's Cards</h4>
+        <Dealer setDealer={dealer} />
       </div>
-      <div className="row">
-        <h4>Your Cards</h4>
+      <div className="row mt-4 mb-4">
+        <h4>Players</h4>
+        <Players items={players} />
       </div>
-      <div className="row">
-        {showPlayers}
-        {/* <ul>
-          {hands.map(player => (
-            <li key={player.name}>
-              <ul>
-                {player.cards.map(card => (
-                  <li key={card.id}>{card.face} {card.suite}</li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul> */}
-      </div>
-      <button className="btn btn-primary" onClick={dealInitialHand}>New Deal</button>
-      <button className="btn btn-primary" onClick={dealCards}>Next Card</button>
+      <button className="btn btn-primary m-2" onClick={dealInitialHand}>New Deal</button>
+      <button className="btn btn-primary m-2" onClick={join}>Join</button>
+      <button className="btn btn-primary m-2" onClick={hit}>Hit</button>
     </div>
   );
 }

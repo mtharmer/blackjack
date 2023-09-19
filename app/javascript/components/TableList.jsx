@@ -22,7 +22,7 @@ export default function TableList() {
     <div key={index} className="col-sm-6 col-lg-3">
       <div className="card">
         <h5>Open Seats: 1</h5>
-        <Link to={`/table/${t.unique_id}`} className="btn btn-primary">
+        <Link to={`/table/${t._id.$oid}`} className="btn btn-primary">
           Join Table
         </Link>
       </div>

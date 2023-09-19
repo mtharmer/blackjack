@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       get 'shoe/new'
       get 'table_types/index'
       get 'table_type/:id', to: 'table_types#show'
+      get 'table/:id/join/:username', to: 'tables#join'
+      get 'table/:id/deal', to: 'tables#deal'
+      get 'table/:id/hit/:username', to: 'tables#hit'
     end
   end
   get '/*path' => 'home#index'
