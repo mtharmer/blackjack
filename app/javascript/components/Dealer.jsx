@@ -1,4 +1,5 @@
 import React from "react";
+import scoreHelper from "../helpers/scoreHelper";
 import Hand from "./Hand";
 
 export default function Dealer({setDealer}) {
@@ -12,9 +13,11 @@ export default function Dealer({setDealer}) {
     )
   }
 
+  const score = scoreHelper(dealer.cards);
+
   return (
     <>
-      <Hand player={dealer} />
+      <Hand player={dealer} score={score} />
     </>
   )
 }

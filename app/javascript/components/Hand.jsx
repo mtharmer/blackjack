@@ -1,15 +1,8 @@
 import React from "react";
 import Card from "./Card";
 
-export default function Hand({player}) {
+export default function Hand({player, score}) {
   const cards = (player.cards) ? player.cards : [];
-  var sum = 0;
-  var altSum = 0;
-  var score = cards.reduce((acc, cur) => acc + cur.value, sum);
-  var altScore = cards.reduce((acc, cur) => acc + ((cur.alternate_value > 0) ? cur.alternate_value : cur.value), altSum)
-  console.log("Class:Hand - Player Cards", cards);
-  console.log("Class:Hand - score", score);
-  console.log("Class:Hand - alt score", altScore);
 
   if (cards.length <= 0) {
     return (
@@ -27,23 +20,17 @@ export default function Hand({player}) {
     );
   });
 
-  var usableScore;
-  if (score == altScore && score <= 21) {
-    usableScore = `${score}`;
-  } else if (score > 21 && altScore <= 21) {
-    usableScore = `${altScore}`;
-  } else if (score <= 21 && altScore <= 21) {
-    usableScore = `${score} / ${altScore}`;
-  } else {
-    usableScore = "Bust!"
-  }
-
   return (
-    <div>
-      <div className="row">
+    <div className="container">
+      <div className="row m-4 justify-content-center">
+        <div className="col-lg-1">
+          <h3 className="text-center align-middle border rounded-circle">
+            {score}
+          </h3>
+        </div>
+        <div className="w-100"></div>
         {allCards}
       </div>
-      <h5>Score: {usableScore}</h5>
     </div>
   );
 }

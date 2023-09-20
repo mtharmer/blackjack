@@ -2,11 +2,12 @@ import React from "react";
 
 export default function Card({setCard}) {
   const card = setCard;
-  console.log("Class:Card - card", card);
+
+  const cardName = `${card.face.toLowerCase()}_of_${card.suite}.png`
 
   return (
     <div className="card">
-      <h4>{card.face} {card.suite}</h4>
+      <img src={`../images/${cardName}`} />
     </div>
   );
 }

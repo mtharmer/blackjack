@@ -1,9 +1,10 @@
 import React from "react";
+import scoreHelper from "../helpers/scoreHelper";
 import Hand from "./Hand";
+import PlayerActions from "./PlayerActions";
 
-export default function Players({items}) {
+export default function Players({items, callback}) {
   const players = (items) ? items : [];
-  console.log("Class:Players - players", players);
 
   if (!players || players.length <= 0) {
     return (
@@ -14,13 +15,15 @@ export default function Players({items}) {
   }
 
   const showPlayers = players.map((player, index) => {
-      return (
-        <div key={index} className="col">
-          <h4>Player: {player.username}</h4>
-          <Hand player={player} />
-        </div>
-      );
-    });
+    const score = scoreHelper(player.cards);
+    return (
+      <div key={index} className="col">
+        <h4>Player: {player.username}</h4>
+        <Hand player={player} score={score} />
+        <PlayerActions player={player} score={score} callback={callback}/>
+      </div>
+    );
+  });
 
   return (
     <div>
