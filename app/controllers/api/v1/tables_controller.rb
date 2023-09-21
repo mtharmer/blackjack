@@ -24,6 +24,8 @@ class Api::V1::TablesController < ApplicationController
   end
 
   def deal
+    room = "table"
+    ActionCable.server.broadcast("table_updates_#{@table.id}:base", { body: "some update" })
     render json: @table.deal
   end
 

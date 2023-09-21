@@ -5,6 +5,7 @@ import Dealer from "./Dealer";
 import getTable from "../actions/getTable";
 import joinTable from "../actions/joinTable";
 import { dealHand } from "../actions/dealHand";
+import consumer from "../channels/consumer";
 
 export default function Table() {
   const params = useParams();
@@ -18,6 +19,39 @@ export default function Table() {
     setPlayers(body.players);
     setDealer(body.dealer);
   }
+
+  function updatePlayer(player) {
+    setPlayers(prevPlayers => {
+      return prevPlayers.map((pl) => {
+        if (pl._id.$oid == player._id.$oid) {
+          return player;
+        } else {
+          return pl;
+        }
+      });
+    });
+  }
+
+  useEffect(() => {
+    consumer.subscriptions.create({channel: "UpdatesChannel", model: "table", id: params.id, type: "base"}, {
+      connected() { console.log("Table:base connected"); },
+
+      disconnected() { console.log("Table disconnected"); },
+
+      received(data) { console.log("base", data); }
+    });
+
+    consumer.subscriptions.create({channel: "UpdatesChannel", model: "table", id: params.id, type: "player"}, {
+      connected() { console.log("Table:player connected"); },
+
+      disconnected() { console.log("Table disconnected"); },
+
+      received(data) {
+        console.log("redis:player", data);
+        updatePlayer(data);
+      }
+    });
+  }, [params.id]);
 
   // TODO: remove the callback down to the player actions and relace with either redux actions or redis pub/sub
   playerActionCallback = () => getTable(params.id, setData);

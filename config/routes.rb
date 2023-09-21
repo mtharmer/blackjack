@@ -5,12 +5,13 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'tables/:id', to: 'tables#index'
       get 'table/:id', to: 'tables#show'
-      get 'shoe/new'
       get 'table_types/index'
       get 'table_type/:id', to: 'table_types#show'
       get 'table/:id/join/:username', to: 'tables#join'
       get 'table/:id/deal', to: 'tables#deal'
       get 'table/:id/hit/:username', to: 'tables#hit'
+
+      get 'player/:username/hit' => 'players#hit'
     end
   end
   get '/*path' => 'home#index'

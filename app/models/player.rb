@@ -6,15 +6,15 @@ class Player < Person
   attr_accessor :cards
 
   belongs_to :table
-  embeds_many :cards #, as: :cardable
+  embeds_many :cards, as: :cardable
 
   store_in collection: :players
 
-  def give_cards(cards)
-    @cards = cards
-  end
-
-  def save_cards(cards)
-    self.update(cards: cards)
+  def hit
+    shoe = Shoe.find_by(table_id: self.table_id)
+    cards = self.cards.to_a
+    cards << shoe.cards.shift
+    self.set(cards: cards)
+    self
   end
 end

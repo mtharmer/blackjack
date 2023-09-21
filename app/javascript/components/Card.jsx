@@ -7,7 +7,7 @@ export default function Card({setCard}) {
 
   return (
     <div className="card">
-      <img src={`../images/${cardName}`} />
+      <img src={`/images/${cardName}`} />
     </div>
   );
 }
