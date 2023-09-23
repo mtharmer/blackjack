@@ -2,18 +2,20 @@ import React from "react";
 import { dealHand } from "../actions/dealHand";
 import playerDoubleDown from "../actions/playerDoubleDown";
 import playerHit from "../actions/playerHit";
+import playerLeave from "../actions/playerLeave";
 import playerSplit from "../actions/playerSplit";
 import playerStand from "../actions/playerStand";
 
-export default function PlayerActions({player, score, callback}) {
-  const tableId = player.table_id.$oid;
+export default function PlayerActions({player, score}) {
+  const tableId = player.table_id;
   const username = player.username;
   const cards = player.cards;
-  const dealFunc = () => dealHand(tableId, callback);
-  const hitFunc = () => playerHit(tableId, username, callback);
-  const standFunc = () => playerStand(tableId, username, callback);
-  const splitCardsFunc = () => playerSplit(tableId, username, callback);
-  const doubleDownFunc = () => playerDoubleDown(tableId, username, callback);
+  const dealFunc = () => dealHand(tableId);
+  const hitFunc = () => playerHit(tableId, username);
+  const standFunc = () => playerStand(tableId, username);
+  const splitCardsFunc = () => playerSplit(tableId, username);
+  const doubleDownFunc = () => playerDoubleDown(tableId, username);
+  const leaveFunc = () => playerLeave(username);
 
   const canDeal = score <= 0 || score > 21;
   const firstCards = cards.length === 2;
@@ -44,6 +46,11 @@ export default function PlayerActions({player, score, callback}) {
       <div className="col-lg-1">
         <button className={`btn ${firstCards ? 'btn-primary' : 'btn-secondary'} m-2 w-100`} disabled={!firstCards} onClick={doubleDownFunc}>
           Double
+        </button>
+      </div>
+      <div className="col-lg-1">
+        <button className="btn btn-primary m-2 w-100" onClick={leaveFunc}>
+          Leave
         </button>
       </div>
     </div>

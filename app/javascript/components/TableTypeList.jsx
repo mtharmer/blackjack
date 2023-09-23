@@ -22,7 +22,7 @@ export default function TableTypeList() {
       <div className="card">
         <h4>Buy In ${t.buy_in_min} - ${t.buy_in_max}</h4>
         <h5>${t.ante} ante</h5>
-        <Link to={`/tables/${t._id.$oid}`} className="btn btn-primary">
+        <Link to={`/tables/${t.id}`} className="btn btn-primary">
           Select Table Type
         </Link>
       </div>

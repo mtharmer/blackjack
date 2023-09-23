@@ -7,11 +7,13 @@ Rails.application.routes.draw do
       get 'table/:id', to: 'tables#show'
       get 'table_types/index'
       get 'table_type/:id', to: 'table_types#show'
-      get 'table/:id/join/:username', to: 'tables#join'
+      # get 'table/:id/join/:username', to: 'tables#join'
       get 'table/:id/deal', to: 'tables#deal'
-      get 'table/:id/hit/:username', to: 'tables#hit'
+      # get 'table/:id/hit/:username', to: 'tables#hit'
 
       get 'player/:username/hit' => 'players#hit'
+      get 'player/:username/join/:table' => 'players#join'
+      get 'player/:username/leave' => 'players#leave'
     end
   end
   get '/*path' => 'home#index'

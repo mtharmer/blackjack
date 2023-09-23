@@ -1,89 +1,47 @@
-class Table
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
+class Table < ApplicationRecord
   belongs_to :table_type
-
-  attr_accessor :players, :dealer, :shoe
 
   has_one :dealer
   has_many :players
   has_one :shoe
-
-  accepts_nested_attributes_for :dealer, :shoe, :players
+  has_many :cards
 
   def join(username)
     user = User.find_by(username: username)
     self.players << Player.new({username: user.username})
-    { table: self, dealer: self.dealer, players: self.players }
+    { table: self, dealer_cards: self.dealer_cards, players: self.players, player_cards: self.player_cards }
   end
 
   def leave(username)
     user = User.find_by(username: username)
     new_players = self.players.filter { |player| player.username != user.username }
     self.players = new_players
-    { table: self, dealer: self.dealer, players: self.players }
+    { table: self, dealer_cards: self.dealer_cards, players: self.table.players, player_cards: self.table.player_cards }
   end
 
-  def deal
-    players = self.players
-    mod_players = players.to_a.map { |player| { id: player.id, username: player.username, cards: [] } }
-    dealer = self.dealer
-    dealer_cards = []
-    shoe_cards = get_shoe_slice(players.length + 1)
+  def self.deal(table_id)
+    table = Table.includes(dealer: :cards, players: :cards).find_by_id(table_id)
 
-    distribute_cards(mod_players, dealer_cards, shoe_cards)
+    Card.where(table_id: table_id, cardable_type: ['Player', 'Dealer']).destroy_all
 
-    players.each { |player| player.set(cards: get_player_cards(player.id, mod_players)) }
+    2.times do
+      table.players.each { |player| player.hit }
+      table.dealer.hit
+    end
 
-    dealer.set(cards: dealer_cards)
-
-    {table: self, dealer: dealer, players: players}
+    { table: table, dealer_cards: table.dealer_cards, players: table.players.to_a, player_cards: table.player_cards }
   end
 
-  def hit(username)
-    puts "\n\n\nCalling #hit with #{username}"
-    player = Player.find_by(username: username)
-    puts "player: #{player.inspect}\n\n\n"
-    cards = player.cards.to_a
-    cards << one_from_shoe
-    player.set(cards: cards)
-    {table: self, dealer: self.dealer, players: self.players}
+  def player_cards
+    self.cards.where(cardable_type: "Player")
+  end
+
+  def dealer_cards
+    self.cards.where(cardable_type: "Dealer");
   end
 
   def shuffle
     self.shoe.cards = Shoe.new_shoe
     self
-  end
-
-  private
-
-  def get_player_cards(player_id, player_list)
-    found_player = player_list.find { |player| player[:id] == player_id }
-    found_player[:cards] || []
-  end
-
-  def distribute_cards(players, dealer_cards, shoe_cards)
-    2.times do
-      players.each { |player| player[:cards] << shoe_cards.shift }
-      dealer_cards << shoe_cards.shift
-    end
-  end
-
-  def get_shoe_slice(len)
-    # Reshuffle if there are less than two decks remaining in the shoe
-    self.shuffle if self.shoe.cards.length < 104
-
-    cards = self.shoe.cards.to_a
-    shoe_slice = cards.slice!(0, 2*len)
-    self.shoe.set(cards: cards)
-    shoe_slice.to_a
-  end
-
-  def one_from_shoe
-    cards = self.shoe.cards.to_a
-    card = cards.shift
-    self.shoe.set(cards: cards)
-    card
   end
 end

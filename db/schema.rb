@@ -10,16 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_18_163243) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_23_005659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "cards", force: :cascade do |t|
-    t.string "face", null: false
-    t.string "suite", null: false
-    t.integer "value", null: false
+    t.string "name"
+    t.integer "value"
     t.integer "alternate_value"
-    t.index ["face", "suite"], name: "index_cards_on_face_and_suite", unique: true
+    t.string "cardable_type", null: false
+    t.bigint "cardable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "table_id"
+    t.index ["cardable_type", "cardable_id"], name: "index_cards_on_cardable"
+    t.index ["table_id"], name: "index_cards_on_table_id"
+  end
+
+  create_table "dealers", force: :cascade do |t|
+    t.bigint "table_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["table_id"], name: "index_dealers_on_table_id"
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "username", null: false
+    t.bigint "table_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["table_id"], name: "index_players_on_table_id"
+    t.index ["username"], name: "index_players_on_username", unique: true
+  end
+
+  create_table "shoes", force: :cascade do |t|
+    t.bigint "table_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["table_id"], name: "index_shoes_on_table_id"
   end
 
   create_table "table_types", force: :cascade do |t|
@@ -32,11 +60,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_18_163243) do
 
   create_table "tables", force: :cascade do |t|
     t.bigint "table_type_id", null: false
-    t.string "unique_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["table_type_id"], name: "index_tables_on_table_type_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "cards", "tables"
+  add_foreign_key "dealers", "tables"
+  add_foreign_key "players", "tables"
+  add_foreign_key "shoes", "tables"
   add_foreign_key "tables", "table_types"
 end

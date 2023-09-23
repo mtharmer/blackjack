@@ -2,10 +2,10 @@ import React from "react";
 import scoreHelper from "../helpers/scoreHelper";
 import Hand from "./Hand";
 
-export default function Dealer({setDealer}) {
-  const dealer = setDealer;
+export default function Dealer({cards}) {
+  // const dealerCards = cards;
 
-  if (!dealer) {
+  if (!cards) {
     return (
       <div>
         <p>Waiting for dealer...</p>
@@ -13,11 +13,11 @@ export default function Dealer({setDealer}) {
     )
   }
 
-  const score = scoreHelper(dealer.cards);
+  const score = scoreHelper(cards);
 
   return (
     <>
-      <Hand player={dealer} score={score} />
+      <Hand cards={cards} score={score} />
     </>
   )
 }

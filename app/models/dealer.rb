@@ -1,13 +1,5 @@
-class Dealer
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  attr_accessor :cards
-
+class Dealer < ApplicationRecord
+  include CardHitter
   belongs_to :table
-  embeds_many :cards, as: :cardable
-
-  # def give_cards(cards = [])
-  #   @cards = cards
-  # end
+  has_many :cards, as: :cardable
 end

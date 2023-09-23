@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+
 table_types = [
   {buy_in_max: 100, buy_in_min: 10, ante: 1},
   {buy_in_max: 200, buy_in_min: 20, ante: 2},
@@ -17,7 +18,7 @@ table_types.each do |tb|
     table_type = TableType.create!(buy_in_max: tb[:buy_in_max], buy_in_min: tb[:buy_in_min], ante: tb[:ante])
     table = Table.create!(table_type_id: table_type.id)
     Dealer.create!(table_id: table.id)
-    Shoe.create!(table_id: table.id, cards: Shoe.new_shoe)
+    Shoe.create!(table_id: table.id)
   end
 end
 

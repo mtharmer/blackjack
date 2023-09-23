@@ -1,8 +1,18 @@
 class Api::V1::PlayersController < ApplicationController
-  before_action :set_player
+  before_action :set_player, except: [:join]
   def hit
     ActionCable.server.broadcast("table_updates_#{@player.table_id}:player", @player.hit)
-    # render json: table.hit(@player.username)
+    head :ok
+  end
+
+  def join
+    ActionCable.server.broadcast("table_updates_#{params[:table]}:join", Player.join_table(params[:table], params[:username]))
+    head :ok
+  end
+
+  def leave
+    ActionCable.server.broadcast("table_updates_#{@player.table_id}:leave", @player.leave)
+    head :ok
   end
 
   private

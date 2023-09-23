@@ -1,20 +1,26 @@
-class Player < Person
-  include Mongoid::Document
-  include Mongoid::Timestamps
+class Player < ApplicationRecord
+  include CardHitter
 
-  field :username, type: String
+  attribute :username, :string
   attr_accessor :cards
+  attr_writer :cards
 
   belongs_to :table
-  embeds_many :cards, as: :cardable
+  has_many :cards, as: :cardable
 
-  store_in collection: :players
+  validates :username, presence: true, uniqueness: true
 
-  def hit
-    shoe = Shoe.find_by(table_id: self.table_id)
-    cards = self.cards.to_a
-    cards << shoe.cards.shift
-    self.set(cards: cards)
-    self
+  accepts_nested_attributes_for :cards
+
+  def self.join_table(table_id, username)
+    player = Player.create_with(table_id: table_id).find_or_create_by(username: username).as_json
+    player["cards"] ||= []
+    player
+  end
+
+  def leave
+    username = self.username
+    self.destroy
+    username
   end
 end

@@ -1,8 +1,8 @@
 import React from "react";
 import Card from "./Card";
 
-export default function Hand({player, score}) {
-  const cards = (player.cards) ? player.cards : [];
+export default function Hand({cards, score}) {
+  // const cards = (cards) ? cards : [];
 
   if (cards.length <= 0) {
     return (

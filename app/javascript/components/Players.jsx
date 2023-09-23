@@ -3,8 +3,8 @@ import scoreHelper from "../helpers/scoreHelper";
 import Hand from "./Hand";
 import PlayerActions from "./PlayerActions";
 
-export default function Players({items, callback}) {
-  const players = (items) ? items : [];
+export default function Players({items}) {
+  const players = (!items) ? [] : items;
 
   if (!players || players.length <= 0) {
     return (
@@ -14,13 +14,15 @@ export default function Players({items, callback}) {
     );
   }
 
+  console.log(players);
+
   const showPlayers = players.map((player, index) => {
     const score = scoreHelper(player.cards);
     return (
       <div key={index} className="col">
         <h4>Player: {player.username}</h4>
-        <Hand player={player} score={score} />
-        <PlayerActions player={player} score={score} callback={callback}/>
+        <Hand cards={player.cards} score={score} />
+        <PlayerActions player={player} score={score} />
       </div>
     );
   });
