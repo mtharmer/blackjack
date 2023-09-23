@@ -1,7 +1,7 @@
 class Api::V1::PlayersController < ApplicationController
   before_action :set_player, except: [:join]
   def hit
-    ActionCable.server.broadcast("table_updates_#{@player.table_id}:player", @player.hit)
+    ActionCable.server.broadcast("table_updates_#{@player.table_id}:player-hit", @player.hit)
     head :ok
   end
 

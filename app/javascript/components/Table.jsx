@@ -42,11 +42,13 @@ export default function Table() {
   //   setPlayers(prevPlayers => prevPlayers.map(pl => (pl.username === player.username) ? player : pl));
   // }
   function playerHit(card) {
+    console.log("card", card);
     setPlayers(prevPlayers => prevPlayers.map(pl => {
       if (pl.id === card.cardable_id) {
+        console.log("matched player", pl);
         pl.cards.push(card);
       }
-    });
+    }));
   }
 
   function playerJoined(player) {
