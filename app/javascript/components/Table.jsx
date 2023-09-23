@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Players from "./Players";
 import Dealer from "./Dealer";
-import getTable from "../actions/getTable";
-import joinTable from "../actions/joinTable";
+// import getTable from "../actions/getTable";
+// import joinTable from "../actions/joinTable";
 import consumer from "../channels/consumer";
+import { TableActions } from "../actions";
 
 export default function Table() {
   const params = useParams();
@@ -18,13 +19,7 @@ export default function Table() {
     console.log("body", body);
     setTable(body.table);
     setPlayers(body.players.map((pl) => {
-      console.log(pl);
-      console.log(body.player_cards);
-      if (body.player_cards) {
-        pl.cards = body.player_cards.filter(card => card.cardable_id === pl.id);
-      } else {
-        pl.cards = [];
-      }
+      pl.cards = (body.player_cards) ? body.player_cards.filter(card => card.cardable_id === pl.id) : [];
       return pl;
     }));
     setDealer(body.dealer_cards);
@@ -38,16 +33,20 @@ export default function Table() {
     }
   }, [players]);
 
-  // function playerUpdated(player) {
-  //   setPlayers(prevPlayers => prevPlayers.map(pl => (pl.username === player.username) ? player : pl));
-  // }
+  // TODO: Add methods to distribute cards to the dealer
+  function dealerHits(cards) {
+    setDealer(prevCards => [...prevCards, ...cards]);
+  }
+
+  // TODO: After dealer has received cards, inform the users of the game result
+  function decideGame(data) {
+
+  }
+
   function playerHit(card) {
-    console.log("card", card);
     setPlayers(prevPlayers => prevPlayers.map(pl => {
-      if (pl.id === card.cardable_id) {
-        console.log("matched player", pl);
-        pl.cards.push(card);
-      }
+      if (pl.id === card.cardable_id) pl.cards.push(card);
+      return pl;
     }));
   }
 
@@ -60,9 +59,9 @@ export default function Table() {
   }
 
   useEffect(() => {
+    TableActions.getTable(params.id, setData);
+
     consumer.subscriptions.create({channel: "UpdatesChannel", model: "table", id: params.id, type: "base"}, {
-      connected() { console.log("table:base connected"); },
-      disconnected() { console.log("table:base disconnected"); },
       received(data) {
         console.log("table:base received", data);
         setData(data);
@@ -70,17 +69,13 @@ export default function Table() {
     });
 
     consumer.subscriptions.create({channel: "UpdatesChannel", model: "table", id: params.id, type: "player-hit"}, {
-      connected() { console.log("table:player connected"); },
-      disconnected() { console.log("table:player disconnected"); },
       received(data) {
-        console.log(data);
+        console.log("table:player-hit received", data);
         playerHit(data);
       }
     });
 
     consumer.subscriptions.create({channel: "UpdatesChannel", model: "table", id: params.id, type: "join"}, {
-      connected() { console.log("table:join connected"); },
-      disconnected() { console.log("table:join disconnected"); },
       received(data) {
         console.log("table:join received", data);
         playerJoined(data);
@@ -88,14 +83,10 @@ export default function Table() {
     });
 
     consumer.subscriptions.create({channel: "UpdatesChannel", model: "table", id: params.id, type: "leave"}, {
-      connected() { console.log("table:leave connected"); },
-      disconnected() { console.log("table:leave disconnected"); },
       received(data) { playerLeft(data); }
     });
 
     consumer.subscriptions.create({channel: "UpdatesChannel", model: "table", id: params.id, type: "dealer"}, {
-      connected() { console.log("table:dealer connected"); },
-      disconnected() { console.log("table:dealer disconnected"); },
       received(data) {
         console.log("table:dealer received", data);
         setDealer(data);
@@ -105,9 +96,7 @@ export default function Table() {
 
   // TODO: remove the callback down to the player actions and relace with either redux actions or redis pub/sub
 
-  useEffect(() => getTable(params.id, setData), [params.id]);
-
-  const join = () => joinTable(params.id, 'someuser');
+  const join = () => TableActions.joinTable(params.id, 'someuser');
 
   return (
     <div className="container">

@@ -14,8 +14,6 @@ export default function Players({items}) {
     );
   }
 
-  console.log(players);
-
   const showPlayers = players.map((player, index) => {
     const score = scoreHelper(player.cards);
     return (

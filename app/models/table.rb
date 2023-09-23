@@ -20,9 +20,13 @@ class Table < ApplicationRecord
   end
 
   def self.deal(table_id)
-    table = Table.includes(dealer: :cards, players: :cards).find_by_id(table_id)
+    table = Table.includes(dealer: :cards, players: :cards, shoe: :cards).find_by_id(table_id)
 
     Card.where(table_id: table_id, cardable_type: ['Player', 'Dealer']).destroy_all
+
+    if table.shoe&.cards&.length < 104
+      table.shoe.shuffle_shoe
+    end
 
     2.times do
       table.players.each { |player| player.hit }

@@ -1,4 +1,4 @@
-module Shuffler
+module ShoeConcern
   extend ActiveSupport::Concern
 
   SUITES = ["spades", "clubs", "diamonds", "hearts"]
@@ -19,14 +19,13 @@ module Shuffler
   ]
 
   included do
-    def shuffle
+    def shuffle_shoe
+      self.cards.destroy_all
       decks = []
       deck_count = 6 + rand(3)
       deck_count.times { decks << new_deck }
       self.cards = decks.flatten.shuffle
     end
-
-    private
 
     def new_deck
       cards = []

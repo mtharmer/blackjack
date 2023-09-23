@@ -1,6 +1,6 @@
 class Shoe < ApplicationRecord
-  include Shuffler
-  after_create :shuffle
+  include ShoeConcern
+  # after_create :shuffle_shoe
 
   belongs_to :table
   has_many :cards, as: :cardable
