@@ -11,8 +11,8 @@ export function getTable(tableId, callback) {
   .catch((err) => console.log(url, err.message));
 }
 
-export function joinTable(tableId, username) {
-  url = `/api/v1/player/${username}/join/${tableId}`
+export function joinTable(tableId, username, balance) {
+  url = `/api/v1/player/${username}/join?table=${tableId}&balance=${balance}`
   fetch(url)
   .catch((err) => console.log(url, err.message));
 }

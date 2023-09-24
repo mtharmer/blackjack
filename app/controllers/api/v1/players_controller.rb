@@ -6,7 +6,7 @@ class Api::V1::PlayersController < ApplicationController
   end
 
   def join
-    ActionCable.server.broadcast("table_updates_#{params[:table]}:join", Player.join_table(params[:table], params[:username]))
+    ActionCable.server.broadcast("table_updates_#{params[:table]}:join", Player.join_table(params[:table], params[:username], params[:balance]))
     head :ok
   end
 

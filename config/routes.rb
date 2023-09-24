@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       # get 'table/:id/hit/:username', to: 'tables#hit'
 
       get 'player/:username/hit' => 'players#hit'
-      get 'player/:username/join/:table' => 'players#join'
+      get 'player/:username/join' => 'players#join'
       get 'player/:username/leave' => 'players#leave'
     end
   end

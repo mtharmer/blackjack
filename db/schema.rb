@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_23_005659) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_24_011717) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_005659) do
     t.bigint "table_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "buy_in_balance", precision: 15, scale: 2, default: "0.0"
     t.index ["table_id"], name: "index_players_on_table_id"
     t.index ["username"], name: "index_players_on_username", unique: true
   end
@@ -69,6 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_005659) do
     t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "balance", precision: 15, scale: 2, default: "0.0"
   end
 
   add_foreign_key "cards", "tables"

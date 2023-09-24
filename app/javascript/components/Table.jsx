@@ -96,7 +96,7 @@ export default function Table() {
 
   // TODO: remove the callback down to the player actions and relace with either redux actions or redis pub/sub
 
-  const join = () => TableActions.joinTable(params.id, 'someuser');
+  const join = () => TableActions.joinTable(params.id, 'someuser', 1000.00);
 
   return (
     <div className="container">

@@ -1,0 +1,29 @@
+require: rubocop-rails
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  Exclude:
+    - test/**/*
+    - db/migrate/**/*
+
+Style/StringLiterals:
+  Exclude:
+    - Gemfile
+    - Rakefile
+    - test/**/*
+    - config/application.rb
+    - config/boot.rb
+    - config/environments/test.rb
+    - config/environments/development.rb
+    - config/environments/production.rb
+    - config/importmap.rb
+    - config/initializers/assets.rb
+    - config/puma.rb
+    # - app/mailers/application_mailer.rb
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - test/**/*
