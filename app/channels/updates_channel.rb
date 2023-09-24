@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdatesChannel < ApplicationCable::Channel
   def subscribed
     stream_from "#{params[:model]}_updates_#{params[:id]}:#{params[:type]}"

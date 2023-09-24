@@ -1,4 +1,9 @@
-require: rubocop-rails
+require:
+  - rubocop-rails
+  - rubocop-capybara
+
+AllCops:
+  TargetRubyVersion: 3.0
 
 Style/Documentation:
   Enabled: false
@@ -6,24 +11,47 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: true
   Exclude:
-    - test/**/*
+    - Gemfile
+    - Rakefile
+    - config.ru
+    - app/mailers/application_mailer.rb
+    - config/application.rb
+    - config/boot.rb
+    - config/environment.rb
+    - config/environments/test.rb
+    - config/environments/development.rb
+    - config/environments/production.rb
+    - config/initializers/assets.rb
+    - config/puma.rb
+    - config/initializers/**/*
     - db/migrate/**/*
+    - test/**/*
 
 Style/StringLiterals:
   Exclude:
     - Gemfile
     - Rakefile
-    - test/**/*
+    - config.ru
+    - app/mailers/application_mailer.rb
     - config/application.rb
     - config/boot.rb
+    - config/environment.rb
     - config/environments/test.rb
     - config/environments/development.rb
     - config/environments/production.rb
-    - config/importmap.rb
     - config/initializers/assets.rb
     - config/puma.rb
-    # - app/mailers/application_mailer.rb
+    - config/initializers/**/*
+    - test/**/*
 
 Style/ClassAndModuleChildren:
   Exclude:
     - test/**/*
+
+Style/RedundantFetchBlock:
+  Exclude:
+    - config/puma.rb
+
+Style/SymbolArray:
+  Exclude:
+    - config/initializers/**/*

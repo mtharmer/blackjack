@@ -1,4 +1,5 @@
-class TableType < ApplicationRecord
+# frozen_string_literal: true
 
-  has_many :tables
+class TableType < ApplicationRecord
+  has_many :tables, dependent: :destroy
 end

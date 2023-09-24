@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Card < ApplicationRecord
   attribute :name, :string
   attribute :value, :integer
