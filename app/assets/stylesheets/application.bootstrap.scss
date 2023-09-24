@@ -1,2 +1,8 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+.nav-link {
+  display: block;
+  text-decoration: none;
+  font-size: large;
+}

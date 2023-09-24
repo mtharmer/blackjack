@@ -2,6 +2,7 @@
   "name": "blackjack",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.1",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^7.3.0",
     "@popperjs/core": "^2.11.8",
