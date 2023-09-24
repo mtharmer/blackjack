@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getTableTypeList } from "../actions/tableActions";
 
 export default function TableTypeList() {
   const [tables, setTables] = useState([]);
 
-  useEffect(() => {
-    url = '/api/v1/table_types/index';
-    fetch(url)
-    .then((res) => {
-      if (res.ok) {
-        return res.json()
-      }
-      throw new Error("Error loading tables");
-    })
-    .then((res) => setTables(res))
-    .catch((err) => console.log(err.message))
-  }, []);
+  useEffect(() => getTableTypeList(setTables), []);
 
   const allTables = tables.map((t, index) => (
     <div key={index} className="col-sm-6 col-lg-3">

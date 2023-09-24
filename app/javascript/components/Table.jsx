@@ -9,7 +9,7 @@ import { TableActions } from "../actions";
 
 export default function Table() {
   const params = useParams();
-  const [table, setTable] = useState({});
+  // const [table, setTable] = useState({});
   const [players, setPlayers] = useState([]);
   const [dealerCards, setDealer] = useState([]);
   const [isJoined, setIsJoined] = useState(false);
@@ -17,7 +17,7 @@ export default function Table() {
   // TODO: break these into individual requests rather than one large request
   function setData(body) {
     console.log("body", body);
-    setTable(body.table);
+    // setTable(body.table);
     setPlayers(body.players.map((pl) => {
       pl.cards = (body.player_cards) ? body.player_cards.filter(card => card.cardable_id === pl.id) : [];
       return pl;
@@ -34,14 +34,14 @@ export default function Table() {
   }, [players]);
 
   // TODO: Add methods to distribute cards to the dealer
-  function dealerHits(cards) {
-    setDealer(prevCards => [...prevCards, ...cards]);
-  }
+  // function dealerHits(cards) {
+  //   setDealer(prevCards => [...prevCards, ...cards]);
+  // }
 
   // TODO: After dealer has received cards, inform the users of the game result
-  function decideGame(data) {
+  // function decideGame(data) {
 
-  }
+  // }
 
   function playerHit(card) {
     setPlayers(prevPlayers => prevPlayers.map(pl => {
@@ -97,11 +97,12 @@ export default function Table() {
   // TODO: remove the callback down to the player actions and relace with either redux actions or redis pub/sub
 
   const join = () => TableActions.joinTable(params.id, 'someuser', 1000.00);
+  const dealerTitle = "Dealer's Cards";
 
   return (
     <div className="container">
       <div className="row mt-4 mb-4">
-        <h4>Dealer's Cards</h4>
+        <h4>{dealerTitle}</h4>
         <Dealer cards={dealerCards} />
       </div>
       <div className="row mt-4 mb-4">

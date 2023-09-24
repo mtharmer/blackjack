@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { getTableList } from "../actions/tableActions";
 
 export default function TableList() {
   const params = useParams();
   const [tables, setTables] = useState([]);
 
-  useEffect(() => {
-    url = `/api/v1/tables/${params.id}`;
-    fetch(url)
-    .then((res) => {
-      if (res.ok) {
-        return res.json()
-      }
-      throw new Error("Error loading tables");
-    })
-    .then((res) => setTables(res))
-    .catch((err) => console.log(err.message))
-  }, [params.id]);
+  useEffect(() => getTableList(params.id, setTables), [params.id]);
 
   const allTables = tables.map((t, index) => (
     <div key={index} className="col-sm-6 col-lg-3">

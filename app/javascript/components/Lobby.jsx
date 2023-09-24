@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TableTypeList from "./TableTypeList";
 
 export default function Lobby() {
-
   return (
     <div className="container">
       <div className="mt-4 mb-4 p-4 bg-primary text-white rounded-5">
-        <h1>Let's Play!</h1>
         <p>Select a table below to join a table!</p>
       </div>
       <div className="mt-4">
         <TableTypeList />
       </div>
     </div>
-  )
+  );
 }

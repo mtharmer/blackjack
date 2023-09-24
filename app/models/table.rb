@@ -6,7 +6,7 @@ class Table < ApplicationRecord
   has_one :dealer, dependent: :destroy
   has_one :shoe, dependent: :destroy
   has_many :players, dependent: :destroy
-  # has_many :cards, dependent: :destroy
+  has_many :cards, dependent: :destroy
 
   def join(username)
     user = User.find_by(username: username)

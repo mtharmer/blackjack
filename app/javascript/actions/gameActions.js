@@ -1,22 +1,19 @@
-export function playerHit(tableId, username, callback) {
-  url = `/api/v1/player/${username}/hit`
+export function playerHit(username) {
+  const url = `/api/v1/player/${username}/hit`
   fetch(url)
   .catch((err) => console.log(url, err.message));
 }
 
-export function playerStand(tableId, username, callback) {
+// export function playerStand(username) {
+// }
 
-}
+// export function playerSplit(username) {
+// }
 
-export function playerSplit(tableId, username, callback) {
-
-}
-
-export function playerDoubleDown(tableId, username, callback) {
-
-}
+// export function playerDoubleDown(username) {
+// }
 
 export function playerLeave(username) {
-  url = `/api/v1/player/${username}/leave`
+  const url = `/api/v1/player/${username}/leave`
   fetch(url).catch((err) => console.log(err.message));
 }

@@ -4,20 +4,20 @@ import { GameActions, TableActions } from "../actions";
 export default function PlayerActions({player, score}) {
   const tableId = player.table_id;
   const username = player.username;
-  const cards = player.cards;
+  // const cards = player.cards;
   const leaveFunc = () => GameActions.playerLeave(username);
 
   const canDeal = score <= 0 || score > 21;
-  const firstCards = cards.length === 2;
-  const canSplit = firstCards && cards[0].value === cards[1].value;
+  // const firstCards = cards.length === 2;
+  // const canSplit = firstCards && cards[0].value === cards[1].value;
 
   const actions = [
     {text: "Deal", enabled: canDeal, func: () => {TableActions.dealHand(tableId)}},
-    {text: "Hit", enabled: !canDeal, func: () => {GameActions.playerHit(tableId, username)}},
-    {text: "Stand", enabled: !canDeal, func: () => {GameActions.playerStand(tableId, username)}},
+    {text: "Hit", enabled: !canDeal, func: () => {GameActions.playerHit(username)}},
     // TODO: enable these options after the functionality exists
-    // {text: "Split", enabled: canDeal, func: GameActions.playerSplit(tableId, username)},
-    // {text: "Double", enabled: canDeal, func: GameActions.playerDoubleDown(tableId, username)}
+    // {text: "Stand", enabled: !canDeal, func: () => {GameActions.playerStand(username)}},
+    // {text: "Split", enabled: canDeal, func: GameActions.playerSplit(username)},
+    // {text: "Double", enabled: canDeal, func: GameActions.playerDoubleDown(username)}
   ];
 
   const showActions = actions.map((action, index) => {
