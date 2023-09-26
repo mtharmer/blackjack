@@ -1,6 +1,6 @@
 import React from "react";
-import Routes from "../routes";
+import AppRoutes from "../routes";
 
-const App = () => (<>{Routes}</>);
+const App = () => (<AppRoutes />);
 App.displayName = "Blackjack";
 export default App;
